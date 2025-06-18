@@ -1,0 +1,2 @@
+# Camouflaged-Object-Detection-with-IFBO_Net-Model
+Integrated Fusion and Boundary Optimization is mainly composed of  three modules : Focus Intersection Decoder (FID) is responsible for roughly locating the initial position of the object; the Feature Hybrid Interaction Module (FHIM) enables full interaction between features and capture the object local details and the (BRM)  to optimize boundaries.

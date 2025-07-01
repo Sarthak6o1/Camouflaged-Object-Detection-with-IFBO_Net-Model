@@ -93,7 +93,10 @@ def evaluate(model, loader, criterion, device):
             eval_loss += loss.item()
     return eval_loss / len(loader)
 ```
-
+for reducing mae 
+def compute_mae(pred, gt):
+    return torch.abs(pred - gt).mean().item()
+    use this function for better results.
 ---
 
 ## 📂 Folder Structure
@@ -101,12 +104,12 @@ def evaluate(model, loader, criterion, device):
 ```
 Camouflaged-Object-Detection/
 |
-├── unet.py
-├── segnet_model.py
-├── ifbonet.py
+├── U_Net.py
+├── SegNet.py
+├── Ifbo_Net.py
 └── README.md
 ```
-## Use the s_measure,fbw,mae,ephi fucntions from the ifbonet.py
+## Use the s_measure,fbw,mae,ephi fucntions from the Ifbo_Net.py
 
 ---
 

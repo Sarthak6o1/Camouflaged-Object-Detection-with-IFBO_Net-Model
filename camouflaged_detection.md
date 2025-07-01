@@ -104,16 +104,16 @@ Camouflaged-Object-Detection/
 ├── unet.py
 ├── segnet_model.py
 ├── ifbonet.py
-├── metrics.py
-├── data_loader.py
-├── train.py
-├── test.py
 └── README.md
 ```
+## Use the s_measure,fbw,mae,ephi fucntions from the ifbonet.py
 
 ---
 
 ## 🙌 Credits
 
 - [COD10K Dataset on Kaggle](https://www.kaggle.com/datasets/getcam/cod10k)
+
+- 
+
 

@@ -359,8 +359,11 @@ def compute_mae(pred_logits, mask, eps=1e-6):
                    (abs_error * bg).sum() / bg_weight * 0.3
 
     return weighted_mae.item()
-
-
+  ##################################################################################################  
+##use this mae instead 
+##def compute_mae(pred, gt):
+    ##return torch.abs(pred - gt).mean().item()    
+############################################################################################
 def compute_smeasure(pred, mask):
     pred = (pred > 0.5).float()
     mask = (mask > 0.5).float()

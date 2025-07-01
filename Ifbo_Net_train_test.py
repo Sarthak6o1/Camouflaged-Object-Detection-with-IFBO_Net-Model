@@ -345,25 +345,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
-def compute_mae(pred_logits, mask, eps=1e-6):
-    pred = torch.sigmoid(pred_logits)
-    abs_error = torch.abs(pred - mask)
+def compute_mae(pred, gt):
+    return torch.abs(pred - gt).mean().item()    
 
-    fg = (mask > 0.5).float()
-    bg = 1.0 - fg
-
-    fg_weight = fg.sum() + eps
-    bg_weight = bg.sum() + eps
-
-    weighted_mae = (abs_error * fg).sum() / fg_weight * 0.7 + \
-                   (abs_error * bg).sum() / bg_weight * 0.3
-
-    return weighted_mae.item()
-  ##################################################################################################  
-##use this mae instead 
-##def compute_mae(pred, gt):
-    ##return torch.abs(pred - gt).mean().item()    
-############################################################################################
 def compute_smeasure(pred, mask):
     pred = (pred > 0.5).float()
     mask = (mask > 0.5).float()
@@ -423,10 +407,14 @@ from tqdm import tqdm
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model = IFBONet().to(device)
+xavier_init = torch.nn.init.xavier_uniform_
+for module in model.modules():
+    if isinstance(module, torch.nn.Conv2d):
+        xavier_init(module.weight)
 optimizer = torch.optim.SGD(model.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-4)
 scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
 
-num_epochs = 60
+num_epochs = 20
 
 train_losses = []
 train_maes = []
@@ -498,6 +486,7 @@ with torch.no_grad():
 n_test = len(test_loader)
 print("\nFinal Test Evaluation:")
 print(f"  Test Loss: {test_loss / n_test:.4f}, Acc: {test_acc / n_test:.4f}, MAE: {test_mae / n_test:.4f}, Sα: {test_salpha / n_test:.4f}, Eϕ: {test_ephi / n_test:.4f}, Fβw: {test_fbw / n_test:.4f}")
+
 
 import matplotlib.pyplot as plt
 import numpy as np

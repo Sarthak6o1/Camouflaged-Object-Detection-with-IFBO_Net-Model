@@ -1,7 +1,3 @@
-import os
-print(os.listdir('/content/COD10K-v3'))
-
-
 train_path = '/content/COD10K-v3/Train'
 test_path = '/content/COD10K-v3/Test'
 

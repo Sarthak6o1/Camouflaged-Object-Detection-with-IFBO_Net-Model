@@ -5,6 +5,9 @@ This repository provides state-of-the-art PyTorch implementations for camouflage
 -
 Adjust the num_epochs Accordingly
 
+**Lets First of All clone the repository:**
+git clone https://github.com/Sarthak6o1/Camouflaged-Object-Detection-with-IFBO_Net-Model.git
+
 ## 🚀 Quick Start
 
 1. **Mount Google Drive (for Colab):**

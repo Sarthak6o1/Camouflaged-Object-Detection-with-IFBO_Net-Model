@@ -41,19 +41,19 @@ Adjust the num_epochs Accordingly
 ├── IFBO_Net_metrics.py            # Metrics for IFBO-Net
 ├── IFBO_Net_model_train.py        # Training pipeline (Adam optimizer)
 ├── IFBO_Net_model_test.py         # Evaluation pipeline
-├── IFBO_Net_original.py           # Reference implementation
+├── IFBO_Net_original.py           # Initial implementation
 
 ├── SegNet_architecture.py         # SegNet definition
 ├── SegNet_metrics.py              # SegNet metrics
 ├── SegNet_model_train.py          # Training pipeline (SGD optimizer)
 ├── SegNet_model_test.py           # Evaluation pipeline
-├── SegNet_Original.py             # Reference code
+├── SegNet_Original.py             # Initial Implementation
 
 ├── UNet_architecture.py           # UNet definition
 ├── UNet_metrics.py                # UNet metrics
 ├── UNet_model_train.py            # Training pipeline (SGD + scheduler)
 ├── UNet_model_test.py             # Evaluation pipeline
-├── UNet_original.py               # Reference code
+├── UNet_original.py               # Initial Implementation
 
 ├── dataset_loader_cod10k.py       # DataLoader & transforms (Resize 256×256)
 ├── cod10k_visualizer.py           # Initial image visualizer (raw images & masks)

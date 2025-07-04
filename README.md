@@ -142,12 +142,9 @@ Each training script follows this workflow:
 - [COD10K Dataset](https://www.kaggle.com/datasets/getcam/cod10k)
 - Zhao et al., *EGNet: Edge Guidance Network for Salient Object Detection*, ICCV 2019.
 - Long et al., *Fully Convolutional Networks*, CVPR 2015.
--Camouflaged object detection with integrated feature fusion
+- Camouflaged object detection with integrated feature fusion
   and boundary optimization
-  Bin Ge1
-· Xiaolong Peng1
-
-· Chenxing Xia1
+  Bin Ge1 · Xiaolong Peng1 · Chenxing Xia1
 
 · Hailong Chen1
 

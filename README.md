@@ -1,123 +1,150 @@
-# Camouflaged-Object-Detection-with-IFBO_Net-Model
-Integrated Fusion and Boundary Optimization is mainly composed of  three modules : Focus Intersection Decoder (FID) is responsible for roughly locating the initial position of the object; the Feature Hybrid Interaction Module (FHIM) enables full interaction between features and capture the object local details and the (BRM)  to optimize boundaries.
-# Camouflaged Object Detection using SegNet, U-Net, and IFBONet
+# Camouflaged Object Detection with IFBO-Net, SegNet, and UNet
 
-This project implements Camouflaged Object Detection (COD) using three deep learning architectures: **SegNet**, **U-Net**, and **IFBONet**. The goal is to segment objects that are visually camouflaged in complex scenes using supervised semantic segmentation.
+This repository provides state-of-the-art PyTorch implementations for camouflaged object detection using three architectures: **IFBO-Net**, **SegNet**, and **UNet**.
+
+-
+Adjust the num_epochs Accordingly
+
+## 🚀 Quick Start
+
+1. **Mount Google Drive (for Colab):**
+   ```python
+   from google.colab import drive
+   drive.mount('/content/drive')
+   ```
+
+2. **Prepare COD10K dataset:**  
+   - Download from Kaggle: `https://www.kaggle.com/datasets/getcam/cod10k`  
+   - Unzip into: `/content/drive/MyDrive/COD10K/` (or adjust paths in `dataset_loader_cod10k.py`)
+
+3. **Run training and testing:**  
+   ```bash
+   # For IFBO-Net
+   python IFBO_Net_model_train.py
+   python IFBO_Net_model_test.py
+
+   # For SegNet
+   python SegNet_model_train.py
+   python SegNet_model_test.py
+
+   # For UNet
+   python UNet_model_train.py
+   python UNet_model_test.py
+   ```
 
 ---
 
-## 📁 Dataset: COD10K
+## 🔍 Project Structure
 
-Dataset used: [COD10K on Kaggle](https://www.kaggle.com/datasets/getcam/cod10k)
+```
+├── IFBO_Net_architecture.py       # IFBO-Net model definition
+├── IFBO_Net_metrics.py            # Metrics for IFBO-Net
+├── IFBO_Net_model_train.py        # Training pipeline (Adam optimizer)
+├── IFBO_Net_model_test.py         # Evaluation pipeline
+├── IFBO_Net_original.py           # Reference implementation
 
-### Structure:
+├── SegNet_architecture.py         # SegNet definition
+├── SegNet_metrics.py              # SegNet metrics
+├── SegNet_model_train.py          # Training pipeline (SGD optimizer)
+├── SegNet_model_test.py           # Evaluation pipeline
+├── SegNet_Original.py             # Reference code
 
-- 10,000 camouflaged object images with annotations.
-- Divided into **Train**, **Validation**, and **Test** sets.
-- Each sample includes:
-  - RGB image
-  - GT\_Object (segmentation mask)
-  - GT\_Edge (object edges)
-  - GT\_Instance (instance masks)
+├── UNet_architecture.py           # UNet definition
+├── UNet_metrics.py                # UNet metrics
+├── UNet_model_train.py            # Training pipeline (SGD + scheduler)
+├── UNet_model_test.py             # Evaluation pipeline
+├── UNet_original.py               # Reference code
 
-```bash
-!unzip "/content/drive/MyDrive/archive.zip" -d /content/
+├── dataset_loader_cod10k.py       # DataLoader & transforms (Resize 256×256)
+├── cod10k_visualizer.py           # Initial image visualizer (raw images & masks)
+├── Mounting_drive.py              # Utility for Google Drive mounting
+├── requirements.txt               # Python dependencies
+└── README.md                      # This file
 ```
 
 ---
 
-## 🧠 Architectures Used
+## 🛠️ Data Preparation & Loading
 
-### 🔹 U-Net
-
-- Encoder-decoder network with skip connections.
-- Captures context and enables precise localization.
-
-### 🔹 SegNet
-
-- Encoder-decoder based on VGG16.
-- Upsampling uses pooling indices from encoder.
-
-### 🔹 IFBONet
-
-- A custom architecture for COD based on **Integrate Fusion and Boundary Optimization**.
-- Performed with:
-  - **SGD optimizer**
-  - **Learning Rate Scheduler**
-  - **Gradient Clipping**
-  - **CrossEntropy + Dice Loss**
-
----
-
-## ⚙️ Training Setup
-
-- Platform: Google Colab
-- GPU: Tesla T4
-- Framework: PyTorch
-- Loss: Binary Cross-Entropy + Dice
-- Optimizer: SGD with momentum
-- Scheduler: StepLR/ReduceLROnPlateau
-- Augmentations: RandomFlip, Normalize, Resize
-
----
-
-## 📊 PyTorch Training Pipeline
+- **Transforms**: All images and masks are resized to `(256, 256)` and converted to tensors.
+- **Datasets**: `COD10KDataset` handles reading image-mask pairs from `Train` and `Test` folders.
+- **DataLoader**: Batches data (`batch_size=8`), shuffles train set, uses `num_workers=2`.
 
 ```python
-def train(model, loader, optimizer, criterion, device):
-    model.train()
-    epoch_loss = 0
-    for imgs, masks in loader:
-        imgs, masks = imgs.to(device), masks.to(device)
-        optimizer.zero_grad()
-        outputs = model(imgs)
-        loss = criterion(outputs, masks)
-        loss.backward()
-        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
-        optimizer.step()
-        epoch_loss += loss.item()
-    return epoch_loss / len(loader)
+transform = transforms.Compose([
+    transforms.Resize((256, 256)),
+    transforms.ToTensor()
+])
+mask_transform = transforms.Compose([
+    transforms.Resize((256, 256)),
+    transforms.ToTensor()
+])
+
+train_loader = DataLoader(...)
+test_loader  = DataLoader(...)
 ```
 
 ---
 
-## 📊 PyTorch Evaluation Pipeline
+## 📈 Visualization
 
-```python
-def evaluate(model, loader, criterion, device):
-    model.eval()
-    eval_loss = 0
-    with torch.no_grad():
-        for imgs, masks in loader:
-            imgs, masks = imgs.to(device), masks.to(device)
-            outputs = model(imgs)
-            loss = criterion(outputs, masks)
-            eval_loss += loss.item()
-    return eval_loss / len(loader)
-```
-for reducing mae 
-def compute_mae(pred, gt):
-    return torch.abs(pred - gt).mean().item()
-    use this function for better results.
----
-
-## 📂 Folder Structure
-
-```
-Camouflaged-Object-Detection/
-|
-├── U_Net.py
-├── SegNet.py
-├── Ifbo_Net.py
-└── README.md
-```
-## Use the s_measure,fbw,mae,ephi fucntions from the Ifbo_Net.py
+- **cod10k_visualizer.py** provides an **initial image visualization** of raw images and corresponding ground-truth masks using matplotlib.  
+- For prediction heatmaps and advanced plotting, refer to your custom evaluation scripts.
 
 ---
 
-## 🙌 Credits
+## 🏋️‍♂️ Training Pipeline
 
-- [COD10K Dataset on Kaggle](https://www.kaggle.com/datasets/getcam/cod10k)
+Each training script follows this workflow:
 
-- 
+1. **Setup**: Check for CUDA, instantiate model on `device`.
+2. **Optimizer & Scheduler** (_UNet, SegNet_):  
+   - SGD with momentum (0.9), weight decay (1e-4).  
+   - `StepLR` scheduler (step_size=10, gamma=0.1).  
+   - IFBO-Net uses Adam (lr=0.001).
+3. **Loss Function**:  
+   - IFBO-Net: `BCE` loss.  
+   - SegNet & UNet: `BCEDiceLoss` (combines BCE + Dice).
+4. **Training Loop**:  
+   ```python
+   for epoch in range(num_epochs):
+       model.train()
+       for images, masks in train_loader:
+           outputs = model(images)
+           loss = criterion(outputs, masks)
+           optimizer.zero_grad()
+           loss.backward()
+           torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+           optimizer.step()
+       scheduler.step()  # if using scheduler
+   ```
+
+---
+
+## 📊 Evaluation Metrics
+
+- **Loss**: BCE, Dice
+- **Accuracy**: Pixel-level accuracy
+- **MAE**: Mean absolute error
+- **S-measure (Sα)**: Structural similarity
+- **E-measure (Eϕ)**: Enhanced alignment
+- **Fβw**: Weighted F-measure
+- **Dice Coefficient**: Overlap measure
+- **IoU**: Intersection over Union
+
+---
+
+## 📚 References
+
+- [COD10K Dataset](https://www.kaggle.com/datasets/getcam/cod10k)
+- Zhao et al., *EGNet: Edge Guidance Network for Salient Object Detection*, ICCV 2019.
+- Long et al., *Fully Convolutional Networks*, CVPR 2015.
+-Camouflaged object detection with integrated feature fusion
+  and boundary optimization
+  Bin Ge1
+· Xiaolong Peng1
+
+· Chenxing Xia1
+
+· Hailong Chen1
 

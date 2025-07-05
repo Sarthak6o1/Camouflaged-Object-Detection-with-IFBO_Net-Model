@@ -46,6 +46,8 @@ git clone https://github.com/Sarthak6o1/Camouflaged-Object-Detection-with-IFBO_N
 ├── IFBO_Net_model_test.py         # Evaluation pipeline
 ├── IFBO_Net_original.py           # Initial implementation
 
+├──SARNet_architecture.py          #Implemented the SARNet nodel architecture use the Similar metrics  and training ,testing files of SegNet_metrics.py SegNet_model_train.py SegNet_model_test.py
+
 ├── SegNet_architecture.py         # SegNet definition
 ├── SegNet_metrics.py              # SegNet metrics
 ├── SegNet_model_train.py          # Training pipeline (SGD optimizer)
